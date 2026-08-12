@@ -1,0 +1,25 @@
+year,ownership,rd_expenditure,value_kind,model,prediction
+2021,Irish ownership,1177296.0,actual,Last observation,977845.0
+2021,Non Irish ownership,2701711.0,actual,Last observation,2413320.0
+2022,Irish ownership,1143697.0,estimate,Last observation,977845.0
+2022,Non Irish ownership,5851278.0,estimate,Last observation,2413320.0
+2023,Irish ownership,1132247.0,actual,Last observation,977845.0
+2023,Non Irish ownership,5871498.0,actual,Last observation,2413320.0
+2024,Irish ownership,1012941.0,estimate,Last observation,977845.0
+2024,Non Irish ownership,5576624.0,estimate,Last observation,2413320.0
+2021,Irish ownership,1177296.0,actual,Log-linear trend,1092949.492
+2021,Non Irish ownership,2701711.0,actual,Log-linear trend,2177447.969
+2022,Irish ownership,1143697.0,estimate,Log-linear trend,1155193.338
+2022,Non Irish ownership,5851278.0,estimate,Log-linear trend,2301454.316
+2023,Irish ownership,1132247.0,actual,Log-linear trend,1220981.989
+2023,Non Irish ownership,5871498.0,actual,Log-linear trend,2432522.861
+2024,Irish ownership,1012941.0,estimate,Log-linear trend,1290517.322
+2024,Non Irish ownership,5576624.0,estimate,Log-linear trend,2571055.797
+2021,Irish ownership,1177296.0,actual,Random forest,945556.381
+2021,Non Irish ownership,2701711.0,actual,Random forest,2076804.223
+2022,Irish ownership,1143697.0,estimate,Random forest,945556.381
+2022,Non Irish ownership,5851278.0,estimate,Random forest,2076804.223
+2023,Irish ownership,1132247.0,actual,Random forest,945556.381
+2023,Non Irish ownership,5871498.0,actual,Random forest,2076804.223
+2024,Irish ownership,1012941.0,estimate,Random forest,945556.381
+2024,Non Irish ownership,5576624.0,estimate,Random forest,2076804.223
