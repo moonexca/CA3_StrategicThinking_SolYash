@@ -1,0 +1,4 @@
+model,rmse,mae,smape_pct,r2
+Log-linear trend,2056339.562,1372598.027,38.156,0.093
+Last observation,2060357.103,1362829.0,38.68,0.089
+Random forest,2275355.937,1547231.198,46.746,-0.111

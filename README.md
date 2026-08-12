@@ -1,92 +1,78 @@
-# Stimulating Ireland's Innovation Ecosystem
+# Ireland Innovation Ecosystem Analytics
 
-Innovation is often described in broad and triumphant language. Nations speak of ecosystems, strategy, talent, competitiveness, resilience. But once the slogans are set aside, the harder question remains: where is innovation actually concentrated, who carries it, and what kind of structure does it leave behind? This project begins there, in the space between public language and measurable pattern.
+An analysis of Irish R&D expenditure, enterprise participation, and intellectual
+property activity using Central Statistics Office datasets.
 
-This repository contains an academic analytics project by **Soledad Yash** built around public data from Ireland's **Central Statistics Office (CSO)**. It examines research and development expenditure, enterprise behaviour, and intellectual property activity in order to read Ireland's innovation ecosystem with greater precision and less mythology.
+## At a glance
 
-## What this project does
+- **Question:** how do ownership structure and time relate to reported business
+  R&D expenditure in Ireland?
+- **Data:** three CSO extracts covering expenditure, participating enterprises,
+  and intellectual-property activity.
+- **Methods:** schema harmonisation, missingness analysis, descriptive trends,
+  and a leakage-safe forward holdout benchmark.
+- **Stack:** Python, pandas, scikit-learn, matplotlib, seaborn.
 
-The notebook does not assume that the available datasets form a clean, unified picture. They do not. Instead, it treats them as partial views of the same landscape and asks how far they can be aligned without forcing false coherence.
+![Forward holdout comparison](results/forward_holdout_comparison.png)
 
-The workflow includes:
+## The most important technical finding
 
-- dataset-by-dataset inspection
-- schema and naming harmonisation
-- conservative cleaning and merge logic
-- categorical encoding
-- statistical imputation with explicit rationale
-- engineered indicators for R&D intensity and enterprise structure
-- descriptive visualisation
-- exploratory modelling
+The three datasets do not form one naturally aligned machine-learning table:
+their reporting years and units differ. The historical notebook forced them into
+a common grid and then predicted R&D expenditure with features derived from that
+same expenditure. That caused target leakage and an implausible R² close to 1.0.
 
-The models are not presented as instruments of certainty. They are used to test whether the structure of the sample carries enough internal consistency to support cautious interpretation.
+The corrected portfolio analysis makes two deliberate choices:
 
-## Main analytical components
+1. it keeps the datasets separate unless a join is methodologically justified;
+2. it models total R&D expenditure using only year and ownership, evaluated on
+   later years that were not available to the model during training.
 
-- public-sector data integration
-- exploratory analytics
-- imputation strategy
-- feature engineering
-- structural interpretation of ownership and expenditure patterns
-- model comparison using:
-  - linear regression
-  - decision tree regression
-  - random forest regression
+This produces less impressive metrics, but a much more credible technical story.
+See [`MODEL_CARD.md`](MODEL_CARD.md) and
+[`results/forward_holdout_metrics.csv`](results/forward_holdout_metrics.csv).
 
-## Repository contents
+On the 2021–2024 forward holdout, the log-linear trend achieved RMSE
+`2,056,340` and R² `0.093`, only narrowly ahead of the last-observation baseline
+(RMSE `2,060,357`, R² `0.089`). The near-perfect historical result therefore
+does not survive leakage-safe temporal validation.
 
-- [Adriana_Soledad_Yash_Ecosystem_of_Innovation_Ireland.ipynb](./Adriana_Soledad_Yash_Ecosystem_of_Innovation_Ireland.ipynb): main notebook
-- [CA3_AdrianaSoledadYash_InnovationEcosystem_Report.odt](./CA3_AdrianaSoledadYash_InnovationEcosystem_Report.odt): written report
-- [Ireland innovation poster.mp4](./Ireland%20innovation%20poster.mp4): presentation asset
-- `BSA02.20250516T100541.csv`, `BSA22.20250516T200531.csv`, `CIS62.20250516213458.csv`: source datasets
-- `df1_imputed.csv`, `df2_imputed.csv`, `df3_imputed.csv`: intermediate imputed outputs
+## Reproduce the validated benchmark
 
-## Environment
+```bash
+python -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+python -m src.modeling
+pytest -q
+```
 
-The notebook uses Python packages including:
+## Repository map
 
-- `pandas`
-- `numpy`
-- `matplotlib`
-- `seaborn`
-- `scikit-learn`
+- [`src/modeling.py`](src/modeling.py): panel construction and forward validation
+- [`tests/test_modeling.py`](tests/test_modeling.py): leakage and data-contract tests
+- [`results/`](results): validated panel, predictions, metrics, and chart
+- [`MODEL_CARD.md`](MODEL_CARD.md): assumptions, intended use, and limitations
+- [`Adriana_Soledad_Yash_Ecosystem_of_Innovation_Ireland.ipynb`](Adriana_Soledad_Yash_Ecosystem_of_Innovation_Ireland.ipynb):
+  historical academic notebook
+- [`CA3_AdrianaSoledadYash_InnovationEcosystem_Report.odt`](CA3_AdrianaSoledadYash_InnovationEcosystem_Report.odt):
+  submitted report
+- `BSA02`, `BSA22`, and `CIS62` CSV files: source extracts
 
-See [requirements.txt](./requirements.txt) for a compact environment list.
+## Limitations
 
-## Why it matters
-
-This project sits close to questions that matter to me:
-
-- how institutions describe themselves
-- how investment is concentrated or dispersed
-- how public data can be read without pretending it says more than it does
-- how analytics can sharpen interpretation in policy and strategic contexts
-
-## Reproducibility notes
-
-- This repository is published as a **historical academic project**.
-- It has been cleaned for portfolio use, but it does not attempt to reconstruct a production pipeline.
-- The notebook preserves the assignment-era workflow and its limitations.
-
-## Academic and IP statement
-
-This repository contains academic work authored by **Soledad Yash** and is published for portfolio and research communication.
-
-- The analysis, structuring, and interpretation are presented as the author's academic work.
-- Public data sources remain subject to their original usage conditions.
-- The academic context is acknowledged for transparency only and does not imply institutional endorsement.
-
-See [ACADEMIC_USE_AND_IP.md](./ACADEMIC_USE_AND_IP.md) for the extended statement.
-
-## AI use disclosure
-
-AI-assisted support may have been used in limited surrounding tasks such as drafting, wording refinement, or structural editing support. Final responsibility for validation, interpretation, and publication remains with **Soledad Yash**.
-
-See [AI_USE_DISCLOSURE.md](./AI_USE_DISCLOSURE.md) for a fuller note on limitations, responsible use, and security awareness.
+- The validated panel has two ownership series and only 18 annual observations
+  per series.
+- Odd years contain actual totals; even years contain official estimates.
+- The 2023 increase is a structural challenge for trend-based models.
+- The analysis is descriptive and predictive, not causal.
 
 ## Author
 
-**Soledad Yash**  
-Dublin, Ireland  
-[LinkedIn](https://www.linkedin.com/in/soledad-yash)  
+**Soledad Yash** · Dublin, Ireland<br>
+[LinkedIn](https://www.linkedin.com/in/soledad-yash) ·
 [GitHub](https://github.com/moonexca)
+
+Academic context and responsible-use notes are available in
+[`ACADEMIC_USE_AND_IP.md`](ACADEMIC_USE_AND_IP.md) and
+[`AI_USE_DISCLOSURE.md`](AI_USE_DISCLOSURE.md).
